@@ -50,3 +50,10 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# VS Code
+.vscode
+
+# Remove Makefile Build for now
+./bin
+./obj
