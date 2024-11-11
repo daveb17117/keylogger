@@ -23,8 +23,8 @@ BOOL WINAPI ControlHandler(DWORD fdwCtrlType) {
 
 int main(void) {
     // Hide console window
-    //HWND consoleWindow = GetConsoleWindow();
-    //ShowWindow(consoleWindow, SW_HIDE);
+    HWND consoleWindow = GetConsoleWindow();
+    ShowWindow(consoleWindow, SW_HIDE);
 
     // Set up the control handler
     if (!SetConsoleCtrlHandler(ControlHandler, TRUE)) {
