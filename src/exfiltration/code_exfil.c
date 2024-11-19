@@ -2,8 +2,14 @@
 // Library for implementing the sleep() function
 #include <windows.h>
 
-// Library for implementing the 
+// Library for working with Sockets on Windows
+#include<winsock2.h>
+
+// Library for implementing the "random" number
 #include <time.h>
+
+// TODO: Add Library in Linking Process (-lws2_32)
+#pragma comment(lib, "ws2_32.lib") 
 
 // Define the range of the waiting time in miliseconds
 #define MIN_TIME 100
@@ -32,6 +38,63 @@ int checkIfFileExists(const char *fileName)
         return 1;
     }
     return 0;
+}
+
+int sendData(){
+
+    // TODO: Implement read of File
+
+    WSADATA wsa;
+	SOCKET s;
+	struct sockaddr_in server;
+	char *message;
+
+
+	printf("Initialize Win Sock");
+	if (WSAStartup(MAKEWORD(2,2),&wsa) != 0)
+	{
+		printf("Failed to initialize: %d",WSAGetLastError());
+        // Clean up Build process
+        WSACleanup();
+		return 1;
+	}
+	
+	printf("Initialised.\n");
+	
+	
+	if((s = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
+	{
+		printf("Could not create socket : %d" , WSAGetLastError());
+        WSACleanup();
+		return 1;
+	}
+
+	printf("Socket created.\n");
+
+	server.sin_addr.s_addr = inet_addr("127.0.0.1");
+	server.sin_family = AF_INET;
+	server.sin_port = htons( 443 );
+
+	if (connect(s , (struct sockaddr *)&server , sizeof(server)) < 0)
+	{
+		puts("connect error");
+		return 1;
+	}
+	
+	printf("Connected\n");
+
+	message = "Test Message";
+
+	if( send(s, message, strlen(message) , 0) < 0)
+	{
+		printf("Send failed");
+		return 1;
+	}
+	printf("Data sent");
+
+	WSACleanup();
+
+	return 0;
 }
 
 void main(){
