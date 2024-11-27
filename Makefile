@@ -19,7 +19,7 @@ KEYLOGGER_OBJS := $(KEYLOGGER_SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DECRYPT_OBJS := $(DECRYPT_SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 # Libraries
-LIBS := -luser32 -ladvapi32
+LIBS := -luser32 -ladvapi32 -lws2_32
 
 # Debug flags
 DEBUG_FLAGS := -g -DDEBUG
