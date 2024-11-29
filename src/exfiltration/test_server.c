@@ -55,11 +55,17 @@ int main() {
     }
     printf("Connection accepted.\n");
 
-    // Receive data from the client
-    int recv_size = recv(client_socket, buffer, sizeof(buffer), 0);
-    if (recv_size == SOCKET_ERROR) {
-        printf("Recv failed. Error Code: %d\n", WSAGetLastError());
-    } else {
+    while (1) {
+        int recv_size = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
+        if (recv_size == SOCKET_ERROR) {
+            printf("Recv failed. Error Code: %d\n", WSAGetLastError());
+            break;
+        }
+        if (recv_size == 0) { // Connection closed by client
+            printf("Client disconnected.\n");
+            break;
+        }
+
         buffer[recv_size] = '\0'; // Null-terminate the received data
         printf("Received data: %s\n", buffer);
     }
