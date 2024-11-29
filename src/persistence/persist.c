@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <stdio.h>
 #include <shlobj.h> // For SHGetFolderPath
 #include <unistd.h>
 
@@ -46,12 +47,12 @@ void PersistExecutable() {
     // File check
     if (!FileExists(destinationPath)) {
         if (CopyExecutable(sourcePath, destinationPath)) {
-            MessageBox(NULL, "Persistence established.", "Info", MB_OK);
+            printf("Persistence established.");
         } else {
-            MessageBox(NULL, "Failed to copy executable.", "Error", MB_OK);
+            printf("Failed to copy executable.");
         }
     } else {
-        MessageBox(NULL, "Executable already exists in startup folder.", "Info", MB_OK);
+        printf("Executable already exists in startup folder.");
     }
 }
 
